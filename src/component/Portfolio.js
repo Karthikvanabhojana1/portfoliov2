@@ -37,10 +37,6 @@ const Portfolio = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
-  const [showScheduling, setShowScheduling] = useState(false);
-  const [selectedDate, setSelectedDate] = useState('');
-  const [selectedTime, setSelectedTime] = useState('');
-  const [meetingType, setMeetingType] = useState('consultation');
 
   // Refs for performance
   const chatMessagesRef = useRef(null);
@@ -227,6 +223,47 @@ const Portfolio = () => {
       years: '3+'
     }
   ], []);
+
+  const connectOptions = useMemo(() => [
+    {
+      href: `mailto:${personalInfo.email}`,
+      color: '#6366f1',
+      bg: 'rgba(99, 102, 241, 0.1)',
+      iconBg: 'rgba(99, 102, 241, 0.2)',
+      icon: 'fas fa-envelope',
+      label: 'Email',
+      value: personalInfo.email
+    },
+    {
+      href: `tel:${personalInfo.phone}`,
+      color: '#8b5cf6',
+      bg: 'rgba(139, 92, 246, 0.1)',
+      iconBg: 'rgba(139, 92, 246, 0.2)',
+      icon: 'fas fa-phone',
+      label: 'Phone',
+      value: personalInfo.phone
+    },
+    {
+      href: personalInfo.linkedin,
+      target: '_blank',
+      color: '#0077b5',
+      bg: 'rgba(0, 119, 181, 0.1)',
+      iconBg: 'rgba(0, 119, 181, 0.2)',
+      icon: 'fab fa-linkedin',
+      label: 'LinkedIn',
+      value: 'Professional Profile'
+    },
+    {
+      href: personalInfo.github,
+      target: '_blank',
+      color: '#f59e0b',
+      bg: 'rgba(245, 158, 11, 0.1)',
+      iconBg: 'rgba(245, 158, 11, 0.2)',
+      icon: 'fab fa-github',
+      label: 'GitHub',
+      value: 'Source Code Portfolio'
+    }
+  ], [personalInfo]);
 
   // Generate dynamic search data
   const searchData = useMemo(() => [
@@ -646,7 +683,6 @@ ${OPENAI_API_KEY ? 'Powered by ChatGPT for intelligent responses!' : 'Add your O
     console.log('Template ID:', CONFIG.emailjs.templateId);
     console.log('Public Key:', CONFIG.emailjs.publicKey ? 'Set' : 'Missing');
     console.log('Environment check:', typeof process !== 'undefined' ? 'Node.js' : 'Browser');
-    console.log('Meeting scheduled:', selectedDate && selectedTime ? 'Yes' : 'No');
 
     try {
       // Check if EmailJS is configured with real credentials
@@ -662,14 +698,8 @@ ${OPENAI_API_KEY ? 'Powered by ChatGPT for intelligent responses!' : 'Add your O
         
         setSubmitStatus('success');
         
-        const meetingInfo = selectedDate && selectedTime 
-          ? `\n\nMeeting Request:\n• Type: ${meetingType === 'consultation' ? 'Project Consultation' : 
-                                        meetingType === 'technical' ? 'Technical Interview' :
-                                        meetingType === 'portfolio' ? 'Portfolio Review' : 'Hiring Discussion'}\n• Date: ${new Date(selectedDate).toLocaleDateString()}\n• Time: ${selectedTime} PST\n• Duration: ${meetingType === 'technical' ? '45' : meetingType === 'portfolio' ? '20' : '30'} minutes`
-          : '';
-        
         setChatMessages(prev => [...prev, {
-          text: `Demo Mode: Contact form submitted!\n\nContact Details:\n• Name: ${formData.name}\n• Email: ${formData.email}\n• Company: ${formData.company || 'Not specified'}\n• Subject: ${formData.subject || 'General inquiry'}\n• Message: ${formData.message.substring(0, 100)}...${meetingInfo}\n\nTo enable real emails:\n1. Verify your .env file has valid EmailJS credentials\n2. Restart development server\n3. Service ID should start with 'service_'\n4. Template ID should start with 'template_'`,
+          text: `Demo Mode: Contact form submitted!\n\nContact Details:\n• Name: ${formData.name}\n• Email: ${formData.email}\n• Company: ${formData.company || 'Not specified'}\n• Subject: ${formData.subject || 'General inquiry'}\n• Message: ${formData.message.substring(0, 100)}...\n\nTo enable real emails:\n1. Verify your .env file has valid EmailJS credentials\n2. Restart development server\n3. Service ID should start with 'service_'\n4. Template ID should start with 'template_'`,
           isUser: false,
           timestamp: new Date().toLocaleTimeString(),
           isSystem: true
@@ -682,34 +712,12 @@ ${OPENAI_API_KEY ? 'Powered by ChatGPT for intelligent responses!' : 'Add your O
           subject: '',
           message: ''
         });
-        setSelectedDate('');
-        setSelectedTime('');
-        setShowScheduling(false);
-
         setTimeout(() => setSubmitStatus(null), 10000);
         return;
       }
 
       // Real EmailJS integration when environment variables are set
       console.log('Real EmailJS credentials detected - sending actual email...');
-      
-      const meetingDetails = selectedDate && selectedTime 
-        ? {
-            meeting_requested: 'Yes',
-            meeting_type: meetingType === 'consultation' ? 'Project Consultation' : 
-                         meetingType === 'technical' ? 'Technical Interview' :
-                         meetingType === 'portfolio' ? 'Portfolio Review' : 'Hiring Discussion',
-            meeting_date: new Date(selectedDate).toLocaleDateString('en-US', { 
-              weekday: 'long', 
-              year: 'numeric', 
-              month: 'long', 
-              day: 'numeric' 
-            }),
-            meeting_time: selectedTime + ' PST',
-            meeting_duration: meetingType === 'technical' ? '45 minutes' : 
-                             meetingType === 'portfolio' ? '20 minutes' : '30 minutes'
-          }
-        : { meeting_requested: 'No' };
       
       const templateParams = {
         from_name: formData.name,
@@ -721,8 +729,7 @@ ${OPENAI_API_KEY ? 'Powered by ChatGPT for intelligent responses!' : 'Add your O
         to_email: personalInfo.email,
         reply_to: formData.email,
         timestamp: new Date().toLocaleString(),
-        website: personalInfo.website,
-        ...meetingDetails
+        website: personalInfo.website
       };
 
       console.log('Email template parameters:', templateParams);
@@ -772,12 +779,8 @@ ${OPENAI_API_KEY ? 'Powered by ChatGPT for intelligent responses!' : 'Add your O
         console.log('Email sent successfully!');
         setSubmitStatus('success');
         
-        const meetingConfirmation = selectedDate && selectedTime 
-          ? `\n\nMeeting Scheduled:\n• Type: ${meetingDetails.meeting_type}\n• Date: ${meetingDetails.meeting_date}\n• Time: ${meetingDetails.meeting_time}\n• Duration: ${meetingDetails.meeting_duration}\n\nMeeting link will be sent in a separate confirmation email!`
-          : '';
-        
         setChatMessages(prev => [...prev, {
-          text: `Email Sent Successfully!\n\nYour message has been delivered to: ${personalInfo.email}\nFrom: ${formData.name} (${formData.email})\nCompany: ${formData.company || 'Not specified'}\nSubject: ${formData.subject || 'Portfolio Contact Form'}\nSent: ${new Date().toLocaleString()}${meetingConfirmation}\n\nEmailJS Status: ${response.status} - ${response.text}\n\nExpect a response within 24 hours!`,
+          text: `Email Sent Successfully!\n\nYour message has been delivered to: ${personalInfo.email}\nFrom: ${formData.name} (${formData.email})\nCompany: ${formData.company || 'Not specified'}\nSubject: ${formData.subject || 'Portfolio Contact Form'}\nSent: ${new Date().toLocaleString()}\n\nEmailJS Status: ${response.status} - ${response.text}\n\nExpect a response within 24 hours!`,
           isUser: false,
           timestamp: new Date().toLocaleTimeString(),
           isSystem: true
@@ -790,9 +793,6 @@ ${OPENAI_API_KEY ? 'Powered by ChatGPT for intelligent responses!' : 'Add your O
           subject: '',
           message: ''
         });
-        setSelectedDate('');
-        setSelectedTime('');
-        setShowScheduling(false);
       } else {
         throw new Error(`EmailJS returned unexpected status: ${response.status} - ${response.text || 'Unknown error'}`);
       }
@@ -813,7 +813,7 @@ ${OPENAI_API_KEY ? 'Powered by ChatGPT for intelligent responses!' : 'Add your O
       setIsSubmitting(false);
       setTimeout(() => setSubmitStatus(null), 10000);
     }
-  }, [formData, CONFIG.emailjs, personalInfo, selectedDate, selectedTime, meetingType]);
+  }, [formData, CONFIG.emailjs, personalInfo]);
 
   // Initialize chatbot with dynamic welcome message
   useEffect(() => {
@@ -2064,170 +2064,6 @@ ${OPENAI_API_KEY ? 'Powered by ChatGPT for intelligent responses!' : 'Add your O
             />
           </div>
 
-          {/* Optional Meeting Scheduling Section */}
-          <div style={{ 
-            background: 'rgba(16, 185, 129, 0.1)', 
-            border: '2px solid rgba(16, 185, 129, 0.2)',
-            borderRadius: '20px',
-            padding: '2rem',
-            marginBottom: '2rem'
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-              <h3 style={{ color: '#10b981', fontSize: '1.2rem', fontWeight: 'bold', margin: 0 }}>
-                Optional: Schedule a Meeting
-              </h3>
-              <button
-                onClick={() => setShowScheduling(!showScheduling)}
-                style={{
-                  background: showScheduling ? 'rgba(16, 185, 129, 0.3)' : 'rgba(16, 185, 129, 0.2)',
-                  border: '1px solid rgba(16, 185, 129, 0.4)',
-                  borderRadius: '25px',
-                  color: '#10b981',
-                  padding: '0.5rem 1rem',
-                  cursor: 'pointer',
-                  fontSize: '0.9rem',
-                  fontWeight: 'bold',
-                  transition: 'all 0.3s ease'
-                }}
-              >
-                {showScheduling ? 'Hide Calendar' : 'Add Meeting'}
-              </button>
-            </div>
-            
-            <p style={{ color: 'rgba(203, 213, 225, 0.8)', fontSize: '0.95rem', marginBottom: showScheduling ? '1.5rem' : 0 }}>
-              Want to discuss your project in person? Schedule a meeting along with your message!
-            </p>
-
-            {showScheduling && (
-              <div style={{ animation: 'slideInUp 0.3s ease-out' }}>
-                {/* Meeting Type Selection */}
-                <div style={{ marginBottom: '1.5rem' }}>
-                  <label style={{ display: 'block', marginBottom: '0.75rem', color: '#10b981', fontWeight: 700, fontSize: '1rem' }}>
-                    Meeting Type
-                  </label>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.75rem' }}>
-                    {[
-                      { id: 'consultation', title: 'Project Consultation', desc: '30 min discussion' },
-                      { id: 'technical', title: 'Technical Interview', desc: '45 min technical chat' },
-                      { id: 'portfolio', title: 'Portfolio Review', desc: '20 min walkthrough' },
-                      { id: 'hiring', title: 'Hiring Discussion', desc: '30 min role chat' }
-                    ].map(type => (
-                      <button
-                        key={type.id}
-                        onClick={() => setMeetingType(type.id)}
-                        style={{
-                          padding: '0.75rem',
-                          background: meetingType === type.id 
-                            ? 'rgba(16, 185, 129, 0.3)' 
-                            : 'rgba(255, 255, 255, 0.05)',
-                          border: `1px solid ${meetingType === type.id 
-                            ? 'rgba(16, 185, 129, 0.5)' 
-                            : 'rgba(255, 255, 255, 0.1)'}`,
-                          borderRadius: '12px',
-                          color: meetingType === type.id ? '#10b981' : '#e2e8f0',
-                          cursor: 'pointer',
-                          transition: 'all 0.3s ease',
-                          textAlign: 'center',
-                          fontSize: '0.85rem'
-                        }}
-                      >
-                        <div style={{ fontWeight: 'bold', marginBottom: '0.25rem' }}>{type.title}</div>
-                        <div style={{ opacity: 0.8 }}>{type.desc}</div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Date and Time Selection */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: '0.75rem', color: '#10b981', fontWeight: 700, fontSize: '1rem' }}>
-                      Preferred Date
-                    </label>
-                    <input
-                      type="date"
-                      value={selectedDate}
-                      onChange={(e) => setSelectedDate(e.target.value)}
-                      min={new Date(Date.now() + 86400000).toISOString().split('T')[0]}
-                      style={{
-                        width: '100%',
-                        padding: '1rem',
-                        border: '2px solid rgba(16, 185, 129, 0.3)',
-                        borderRadius: '12px',
-                        background: 'rgba(255, 255, 255, 0.08)',
-                        color: '#f8fafc',
-                        fontSize: '1rem',
-                        outline: 'none',
-                        transition: 'all 0.3s ease'
-                      }}
-                    />
-                  </div>
-                  
-                  <div>
-                    <label style={{ display: 'block', marginBottom: '0.75rem', color: '#10b981', fontWeight: 700, fontSize: '1rem' }}>
-                      Preferred Time (PST)
-                    </label>
-                    <select
-                      value={selectedTime}
-                      onChange={(e) => setSelectedTime(e.target.value)}
-                      style={{
-                        width: '100%',
-                        padding: '1rem',
-                        border: '2px solid rgba(16, 185, 129, 0.3)',
-                        borderRadius: '12px',
-                        background: 'rgba(255, 255, 255, 0.08)',
-                        color: '#f8fafc',
-                        fontSize: '1rem',
-                        outline: 'none',
-                        transition: 'all 0.3s ease'
-                      }}
-                    >
-                      <option value="">Select time...</option>
-                      <option value="9:00 AM">9:00 AM</option>
-                      <option value="10:00 AM">10:00 AM</option>
-                      <option value="11:00 AM">11:00 AM</option>
-                      <option value="12:00 PM">12:00 PM</option>
-                      <option value="1:00 PM">1:00 PM</option>
-                      <option value="2:00 PM">2:00 PM</option>
-                      <option value="3:00 PM">3:00 PM</option>
-                      <option value="4:00 PM">4:00 PM</option>
-                      <option value="5:00 PM">5:00 PM</option>
-                      <option value="6:00 PM">6:00 PM</option>
-                    </select>
-                  </div>
-                </div>
-
-                {/* Meeting Summary */}
-                {selectedDate && selectedTime && (
-                  <div style={{
-                    background: 'rgba(16, 185, 129, 0.15)',
-                    border: '1px solid rgba(16, 185, 129, 0.3)',
-                    borderRadius: '12px',
-                    padding: '1rem',
-                    marginTop: '1rem'
-                  }}>
-                    <div style={{ color: '#10b981', fontWeight: 'bold', marginBottom: '0.5rem' }}>
-                      Meeting Summary:
-                    </div>
-                    <div style={{ color: '#e2e8f0', fontSize: '0.9rem', lineHeight: 1.5 }}>
-                      <strong>Type:</strong> {meetingType === 'consultation' ? 'Project Consultation' : 
-                                              meetingType === 'technical' ? 'Technical Interview' :
-                                              meetingType === 'portfolio' ? 'Portfolio Review' : 'Hiring Discussion'}<br/>
-                      <strong>Date:</strong> {new Date(selectedDate).toLocaleDateString('en-US', { 
-                        weekday: 'long', 
-                        year: 'numeric', 
-                        month: 'long', 
-                        day: 'numeric' 
-                      })}<br/>
-                      <strong>Time:</strong> {selectedTime} (Pacific Time)<br/>
-                      <strong>Duration:</strong> {meetingType === 'technical' ? '45' : meetingType === 'portfolio' ? '20' : '30'} minutes
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-
           <button 
             onClick={handleSubmit} 
             disabled={isSubmitting}
@@ -2299,148 +2135,54 @@ ${OPENAI_API_KEY ? 'Powered by ChatGPT for intelligent responses!' : 'Add your O
           <h3 style={{ color: '#f59e0b', marginBottom: '3rem', fontSize: '2rem', fontWeight: 700 }}>
             Other Ways to Connect
           </h3>
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
-            gap: '2rem', 
-            maxWidth: '1000px', 
-            margin: '0 auto' 
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gap: '2rem',
+            maxWidth: '1000px',
+            margin: '0 auto'
           }}>
-            <a href={`mailto:${personalInfo.email}`} style={{ 
-              color: '#6366f1', 
-              textDecoration: 'none', 
-              fontSize: '1rem',
-              padding: '2rem',
-              background: 'rgba(99, 102, 241, 0.1)',
-              borderRadius: '20px',
-              border: '2px solid rgba(99, 102, 241, 0.2)',
-              transition: 'all 0.4s ease',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '1.5rem',
-              backdropFilter: 'blur(10px)',
-              fontWeight: 500
-            }}>
-              <div style={{ 
-                background: 'rgba(99, 102, 241, 0.2)', 
-                padding: '1rem', 
-                borderRadius: '15px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                minWidth: '60px',
-                height: '60px'
-              }}>
-                <i className="fas fa-envelope" style={{ fontSize: '1.5rem' }}></i>
-              </div>
-              <div style={{ textAlign: 'left' }}>
-                <div style={{ fontSize: '0.85rem', opacity: 0.8, marginBottom: '0.25rem' }}>Email</div>
-                <div style={{ fontSize: '1rem', fontWeight: 600 }}>{personalInfo.email}</div>
-              </div>
-            </a>
-            
-            <a href={`tel:${personalInfo.phone}`} style={{ 
-              color: '#8b5cf6', 
-              textDecoration: 'none', 
-              fontSize: '1rem',
-              padding: '2rem',
-              background: 'rgba(139, 92, 246, 0.1)',
-              borderRadius: '20px',
-              border: '2px solid rgba(139, 92, 246, 0.2)',
-              transition: 'all 0.4s ease',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '1.5rem',
-              backdropFilter: 'blur(10px)',
-              fontWeight: 500
-            }}>
-              <div style={{ 
-                background: 'rgba(139, 92, 246, 0.2)', 
-                padding: '1rem', 
-                borderRadius: '15px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                minWidth: '60px',
-                height: '60px'
-              }}>
-                <i className="fas fa-phone" style={{ fontSize: '1.5rem' }}></i>
-              </div>
-              <div style={{ textAlign: 'left' }}>
-                <div style={{ fontSize: '0.85rem', opacity: 0.8, marginBottom: '0.25rem' }}>Phone</div>
-                <div style={{ fontSize: '1rem', fontWeight: 600 }}>{personalInfo.phone}</div>
-              </div>
-            </a>
-            
-            <a href={personalInfo.linkedin} target="_blank" rel="noopener noreferrer" style={{ 
-              color: '#0077b5', 
-              textDecoration: 'none', 
-              fontSize: '1rem',
-              padding: '2rem',
-              background: 'rgba(0, 119, 181, 0.1)',
-              borderRadius: '20px',
-              border: '2px solid rgba(0, 119, 181, 0.2)',
-              transition: 'all 0.4s ease',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '1.5rem',
-              backdropFilter: 'blur(10px)',
-              fontWeight: 500
-            }}>
-              <div style={{ 
-                background: 'rgba(0, 119, 181, 0.2)', 
-                padding: '1rem', 
-                borderRadius: '15px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                minWidth: '60px',
-                height: '60px'
-              }}>
-                <i className="fab fa-linkedin" style={{ fontSize: '1.5rem' }}></i>
-              </div>
-              <div style={{ textAlign: 'left' }}>
-                <div style={{ fontSize: '0.85rem', opacity: 0.8, marginBottom: '0.25rem' }}>LinkedIn</div>
-                <div style={{ fontSize: '1rem', fontWeight: 600 }}>Professional Profile</div>
-              </div>
-            </a>
-            
-            <a href={personalInfo.github} target="_blank" rel="noopener noreferrer" style={{ 
-              color: '#f59e0b', 
-              textDecoration: 'none', 
-              fontSize: '1rem',
-              padding: '2rem',
-              background: 'rgba(245, 158, 11, 0.1)',
-              borderRadius: '20px',
-              border: '2px solid rgba(245, 158, 11, 0.2)',
-              transition: 'all 0.4s ease',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '1.5rem',
-              backdropFilter: 'blur(10px)',
-              fontWeight: 500
-            }}>
-              <div style={{ 
-                background: 'rgba(245, 158, 11, 0.2)', 
-                padding: '1rem', 
-                borderRadius: '15px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                minWidth: '60px',
-                height: '60px'
-              }}>
-                <i className="fab fa-github" style={{ fontSize: '1.5rem' }}></i>
-              </div>
-              <div style={{ textAlign: 'left' }}>
-                <div style={{ fontSize: '0.85rem', opacity: 0.8, marginBottom: '0.25rem' }}>GitHub</div>
-                <div style={{ fontSize: '1rem', fontWeight: 600 }}>Source Code Portfolio</div>
-              </div>
-            </a>
+            {connectOptions.map((option) => (
+              <a
+                key={option.label}
+                href={option.href}
+                target={option.target}
+                rel={option.target ? 'noopener noreferrer' : undefined}
+                className="connect-card"
+                style={{
+                  color: option.color,
+                  textDecoration: 'none',
+                  fontSize: '1rem',
+                  padding: '2rem',
+                  background: option.bg,
+                  borderRadius: '20px',
+                  border: `2px solid ${option.color}33`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '1.5rem',
+                  backdropFilter: 'blur(10px)',
+                  fontWeight: 500
+                }}
+              >
+                <div style={{
+                  background: option.iconBg,
+                  padding: '1rem',
+                  borderRadius: '15px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  minWidth: '60px',
+                  height: '60px'
+                }}>
+                  <i className={option.icon} style={{ fontSize: '1.5rem' }}></i>
+                </div>
+                <div style={{ textAlign: 'left' }}>
+                  <div style={{ fontSize: '0.85rem', opacity: 0.8, marginBottom: '0.25rem' }}>{option.label}</div>
+                  <div style={{ fontSize: '1rem', fontWeight: 600 }}>{option.value}</div>
+                </div>
+              </a>
+            ))}
           </div>
         </div>
       </section>
@@ -2748,6 +2490,36 @@ ${OPENAI_API_KEY ? 'Powered by ChatGPT for intelligent responses!' : 'Add your O
           </div>
         )}
       </div>
+
+      {/* Footer with contact details */}
+      <footer
+        style={{
+          textAlign: 'center',
+          padding: '2rem 1rem',
+          marginTop: '4rem',
+          background: 'rgba(15, 23, 42, 0.95)',
+          borderTop: '1px solid rgba(148, 163, 184, 0.2)',
+          fontSize: '0.9rem'
+        }}
+      >
+        <div style={{ fontWeight: 600 }}>{personalInfo.name}</div>
+        <div style={{ marginTop: '0.5rem' }}>
+          <a
+            href={`mailto:${personalInfo.email}`}
+            style={{ color: '#6366f1', textDecoration: 'none' }}
+          >
+            {personalInfo.email}
+          </a>
+          <span style={{ margin: '0 0.75rem', opacity: 0.6 }}>|</span>
+          <a
+            href={`tel:${personalInfo.phone}`}
+            style={{ color: '#6366f1', textDecoration: 'none' }}
+          >
+            {personalInfo.phone}
+          </a>
+        </div>
+        <div style={{ marginTop: '0.25rem', opacity: 0.8 }}>{personalInfo.location}</div>
+      </footer>
 
       {/* Font Awesome CDN */}
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
