@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders experience section heading', () => {
+test('renders portfolio heading', () => {
   render(<App />);
-  const heading = screen.getByText(/experience/i);
-  expect(heading).toBeInTheDocument();
+  const headings = screen.getAllByText(/Karthik Vanabhojana/i);
+  expect(headings.length).toBeGreaterThan(0);
 });
