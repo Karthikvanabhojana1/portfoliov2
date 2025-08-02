@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 
 const Portfolio = () => {
-  // Environment-aware configuration with browser fallback
+  // Browser-safe configuration
   const CONFIG = {
     // OpenAI API Configuration
     openai: {
@@ -783,12 +783,6 @@ ${OPENAI_API_KEY ? 'Powered by ChatGPT for intelligent responses!' : 'Add your O
           isSystem: true
         }]);
 
-        const alertMessage = selectedDate && selectedTime 
-          ? `Email sent successfully!\n\nMessage delivered to: ${personalInfo.email}\nMeeting scheduled: ${meetingDetails.meeting_date} at ${meetingDetails.meeting_time}\nMeeting type: ${meetingDetails.meeting_type}\n\nConfirmation email with meeting details will follow!`
-          : `Email sent successfully!\n\nDelivered to: ${personalInfo.email}\nFrom: ${formData.name}\nResponse expected: Within 24 hours`;
-
-        alert(alertMessage);
-
         setFormData({
           name: '',
           email: '',
@@ -814,8 +808,6 @@ ${OPENAI_API_KEY ? 'Powered by ChatGPT for intelligent responses!' : 'Add your O
         timestamp: new Date().toLocaleTimeString(),
         isError: true
       }]);
-
-      alert(`Email sending failed\n\nError: ${error.message}\n\nCheck browser console for details\n\nContact directly:\n${personalInfo.email}\n${personalInfo.phone}`);
       
     } finally {
       setIsSubmitting(false);
