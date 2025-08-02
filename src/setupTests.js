@@ -4,12 +4,24 @@
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom';
 
-// Basic mock for IntersectionObserver for tests
-if (typeof window.IntersectionObserver === 'undefined') {
-  class IntersectionObserver {
-    observe() {}
-    unobserve() {}
-    disconnect() {}
+// Polyfill IntersectionObserver for tests
+class IntersectionObserverMock {
+  constructor(callback, options) {
+    this.callback = callback;
+    this.options = options;
   }
-  window.IntersectionObserver = IntersectionObserver;
+
+  observe(target) {
+    this.callback([{ isIntersecting: true, target }]);
+  }
+
+  unobserve() {}
+
+  disconnect() {}
 }
+
+Object.defineProperty(window, 'IntersectionObserver', {
+  writable: true,
+  configurable: true,
+  value: IntersectionObserverMock
+});
