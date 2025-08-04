@@ -2,7 +2,7 @@
 export const personalInfo = {
     name: "Karthik Vanabhojana",
     title: "Software Developer | Java, Spring Boot & Cloud Architecture Specialist",
-    location: "San Jose, CA",
+    location: "USA",
     email: "karthikvanabhojana@gmail.com",
     phone: "+1 617-935-7502",
     website: "https://karthikvanabhojana.com",

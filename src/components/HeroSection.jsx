@@ -1,22 +1,10 @@
-import React from 'react';
-
 const HeroSection = ({ personalInfo, navigateToSection }) => {
-  // Direct navigation function as fallback
-  const handleNavigation = (sectionId) => {
-    console.log(`Attempting to navigate to: ${sectionId}`);
-    
-    if (navigateToSection) {
-      console.log('Using navigateToSection function');
-      navigateToSection(sectionId);
-    } else {
-      console.log('Using direct scroll fallback');
-      const section = document.getElementById(sectionId);
-      if (section) {
-        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      } else {
-        console.error(`Section ${sectionId} not found`);
-      }
-    }
+  const downloadResume = () => {
+    const link = document.createElement('a');
+    link.href = 'https://drive.google.com/drive/folders/17dn1Fy8qNmHk2Nup-9j9ZBqyel_FI9gS?usp=sharing';  // Place PDF in public/resume/
+    link.download = 'Karthik_Vanabhojana_Resume.pdf';
+    link.click();
+
   };
 
   return (
@@ -44,11 +32,37 @@ const HeroSection = ({ personalInfo, navigateToSection }) => {
         }}>
           MS Student at Northeastern University | {personalInfo.location}
         </div>
-        <div className="cta-buttons">
-          <button onClick={() => handleNavigation('projects')} className="btn btn-primary">
+        <div className="cta-buttons" style={{
+          display: 'flex',
+          gap: '1.5rem',
+          justifyContent: 'center',
+          flexWrap: 'wrap'
+        }}>
+          <button onClick={() => navigateToSection('projects')} className="btn btn-primary">
             <span>Explore Projects</span>
           </button>
-          <button onClick={() => handleNavigation('contact')} className="btn btn-secondary">
+          
+          {/* RESUME DOWNLOAD BUTTON */}
+          <button onClick={downloadResume} className="btn btn-accent" style={{
+            background: 'linear-gradient(135deg, #f59e0b, #d97706)',
+            color: 'white',
+            padding: '1.25rem 2.5rem',
+            border: 'none',
+            borderRadius: '50px',
+            fontSize: '1.2rem',
+            fontWeight: 700,
+            cursor: 'pointer',
+            transition: 'all 0.4s ease',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.75rem',
+            boxShadow: '0 10px 30px rgba(245, 158, 11, 0.3)'
+          }}>
+            <i className="fas fa-download"></i>
+            <span>Download Resume</span>
+          </button>
+          
+          <button onClick={() => navigateToSection('contact')} className="btn btn-secondary">
             <span>Get In Touch</span>
           </button>
         </div>

@@ -1,25 +1,26 @@
-// Portfolio.jsx - Complete Main Component
+// Portfolio.jsx - FIXED IMPORT PATHS
 import React, { useState, useEffect } from 'react';
 
 // Components
-import Navigation from './components/Navigation';
-import HeroSection from './components/HeroSection';
-import AboutSection from './components/AboutSection';
-import ExperienceSection from './components/ExperienceSection';
-import TechStackSection from './components/TechStackSection';
-import ProjectsSection from './components/ProjectsSection';
-import ContactSection from './components/ContactSection';
-import Chatbot from './components/Chatbot/Chatbot';
-import GlobalStyles from './components/GlobalStyles';
+import Navigation from './Navigation';
+import HeroSection from './HeroSection';
+import AboutSection from './AboutSection';
+import ExperienceSection from './ExperienceSection';
+import TechStackSection from './TechStackSection';
+import ProjectsSection from './ProjectsSection';
+import ContactSection from './ContactSection';
+import Chatbot from './Chatbot/Chatbot';
+import GlobalStyles from './GlobalStyles';
+import FooterSection from './FooterSection';
 
-// Data and Configuration
-import { personalInfo, projects, experiences, techStack } from './components/data/portfolioData';
+// Data and Configuration - FIXED: Removed components/ prefix
+import { personalInfo, projects, experiences, techStack } from './data/portfolioData';
 
-// Custom Hooks
-import { useSearch } from './components/hooks/useSearch';
-import { useNavigation } from './components/hooks/useNavigation';
-import { useChatbot } from './components/hooks/useChatbot';
-import { useScrollAnimation } from './components/hooks/useScrollAnimation';
+// Custom Hooks - FIXED: Removed components/ prefix
+import { useSearch } from './hooks/useSearch';
+import { useNavigation } from './hooks/useNavigation';
+import { useChatbot } from './hooks/useChatbot';
+import { useScrollAnimation } from './hooks/useScrollAnimation';
 
 const Portfolio = () => {
   // Main state
@@ -61,6 +62,22 @@ const Portfolio = () => {
     document.addEventListener('click', handleClickOutside);
     return () => document.removeEventListener('click', handleClickOutside);
   }, [setShowSearchResults]);
+
+  // DEBUG: Check if ContactSection is rendered
+  useEffect(() => {
+    console.log('PersonalInfo loaded:', personalInfo);
+    
+    setTimeout(() => {
+      const contactSection = document.getElementById('contact');
+      console.log('Contact section check:', contactSection ? '✅ FOUND' : '❌ NOT FOUND');
+      
+      if (!contactSection) {
+        console.log('🚨 CONTACT SECTION NOT FOUND!');
+        const allSections = document.querySelectorAll('section[id]');
+        console.log('Available sections:', Array.from(allSections).map(s => s.id));
+      }
+    }, 2000);
+  }, []);
 
   return (
     <>
@@ -104,7 +121,12 @@ const Portfolio = () => {
           personalInfo={personalInfo}
         />
         
+        {/* CONTACT SECTION - Make sure this is here */}
         <ContactSection 
+          personalInfo={personalInfo}
+        />
+        
+        <FooterSection 
           personalInfo={personalInfo}
         />
         

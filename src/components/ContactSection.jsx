@@ -1,8 +1,7 @@
-// components/ContactForm.jsx - Removed meeting functionality
+// ContactSection.jsx - FIXED with id="contact" and proper wrapper
 import React from 'react';
-import { useContactForm } from './../components/hooks/useContact';
-
-const ContactForm = ({ personalInfo }) => {
+import { useContactForm } from '../components/hooks/useContact';  // FIXED: Removed components/ from path
+const ContactSection = ({ personalInfo }) => {
   const {
     formData,
     isSubmitting,
@@ -19,39 +18,87 @@ const ContactForm = ({ personalInfo }) => {
   ];
 
   return (
-    <div style={{
-      background: 'rgba(255, 255, 255, 0.08)',
-      padding: '3.5rem',
-      borderRadius: '30px',
-      border: '2px solid rgba(99, 102, 241, 0.2)',
-      maxWidth: '700px',
+    <section id="contact" className="reveal" style={{ 
+      padding: '8rem 2rem',
+      maxWidth: '1200px', 
       margin: '0 auto',
-      backdropFilter: 'blur(15px)',
-      boxShadow: '0 20px 40px rgba(0, 0, 0, 0.2)'
+      minHeight: '100vh'  
     }}>
-      {formFields.map((field, index) => (
-        <FormField
-          key={index}
-          field={field}
-          value={formData[field.name]}
+      
+      {/* Section Title */}
+      <h2 className="section-title">Get In Touch</h2>
+      <p style={{ 
+        textAlign: 'center', 
+        fontSize: '1.3rem', 
+        marginBottom: '5rem', 
+        color: 'rgba(203, 213, 225, 0.9)', 
+        maxWidth: '800px', 
+        margin: '0 auto 5rem', 
+        lineHeight: 1.7 
+      }}>
+        Ready to start your next project? I'm actively seeking software development opportunities, 
+        internships, and full-time positions. Expected graduation: August 2025.
+      </p>
+
+      {/* Your existing form */}
+      <div style={{
+        background: 'rgba(255, 255, 255, 0.08)',
+        padding: '3.5rem',
+        borderRadius: '30px',
+        border: '2px solid rgba(99, 102, 241, 0.2)',
+        maxWidth: '700px',
+        margin: '0 auto',
+        backdropFilter: 'blur(15px)',
+        boxShadow: '0 20px 40px rgba(0, 0, 0, 0.2)'
+      }}>
+        
+        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+          <h3 style={{
+            color: '#f59e0b',
+            fontSize: '2rem',
+            fontWeight: 700,
+            marginBottom: '1rem',
+            background: 'linear-gradient(135deg, #f59e0b, #d97706)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent'
+          }}>
+            📧 Send Me a Message
+          </h3>
+          <p style={{
+            color: 'rgba(203, 213, 225, 0.9)',
+            fontSize: '1.1rem',
+            lineHeight: 1.6
+          }}>
+            Let's discuss your project requirements and how I can help bring your ideas to life
+          </p>
+        </div>
+
+        {formFields.map((field, index) => (
+          <FormField
+            key={index}
+            field={field}
+            value={formData[field.name]}
+            onChange={handleInputChange}
+          />
+        ))}
+        
+        <MessageField
+          value={formData.message}
           onChange={handleInputChange}
         />
-      ))}
-      
-      <MessageField
-        value={formData.message}
-        onChange={handleInputChange}
-      />
 
-      <SubmitButton
-        onClick={() => handleSubmit(formData)}
-        isSubmitting={isSubmitting}
-      />
+        <SubmitButton
+          onClick={() => handleSubmit(formData)}
+          isSubmitting={isSubmitting}
+        />
 
-      <StatusMessage submitStatus={submitStatus} />
-    </div>
+        <StatusMessage submitStatus={submitStatus} />
+      </div>
+    </section>  // ← CLOSING SECTION TAG
   );
 };
+
+// Keep all your existing FormField, MessageField, SubmitButton, StatusMessage components exactly the same...
 
 const FormField = ({ field, value, onChange }) => {
   return (
@@ -158,12 +205,12 @@ const SubmitButton = ({ onClick, isSubmitting }) => {
             borderRadius: '50%',
             animation: 'spin 1s linear infinite'
           }}></div>
-          Sending...
+          Sending Message...
         </>
       ) : (
         <>
           <i className="fas fa-paper-plane"></i>
-          Submit Request
+          Send Message
         </>
       )}
     </button>
@@ -199,4 +246,4 @@ const StatusMessage = ({ submitStatus }) => {
   );
 };
 
-export default ContactForm;
+export default ContactSection;

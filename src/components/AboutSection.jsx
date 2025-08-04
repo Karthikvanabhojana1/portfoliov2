@@ -58,8 +58,6 @@ const StatsGrid = ({ experiences }) => {
   const stats = [
     { value: '3+', label: 'Years Experience', color: '#8b5cf6' },
     { value: experiences.length, label: 'Companies', color: '#f59e0b' },
-    { value: '8+', label: 'Projects', color: '#10b981' },
-    { value: '100%', label: 'Success Rate', color: '#6366f1' }
   ];
 
   return (

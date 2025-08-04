@@ -295,7 +295,7 @@ const Chatbot = ({
               marginTop: '1rem',
               justifyContent: 'center'
             }}>
-              {['Projects', 'Experience', 'Skills', 'Contact'].map(action => (
+              {['Projects', 'Experience', 'Skills'].map(action => (
                 <button
                   key={action}
                   onClick={() => {

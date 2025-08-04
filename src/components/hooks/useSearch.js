@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useMemo } from 'react';
-import { personalInfo, projects, experiences, techStack } from '../data/portfolioData';
+import {  projects, experiences, techStack } from '../data/portfolioData';
 
 export const useSearch = () => {
   const [searchQuery, setSearchQuery] = useState('');

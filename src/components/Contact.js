@@ -8,13 +8,10 @@ const ContactSection = () => {
     subject: '',
     message: ''
   });
-  const [showScheduling, setShowScheduling] = useState(false);
-  const [meetingType, setMeetingType] = useState('');
-  const [selectedDate, setSelectedDate] = useState('');
-  const [selectedTime, setSelectedTime] = useState('');
   const [submitStatus, setSubmitStatus] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };

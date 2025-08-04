@@ -1,4 +1,3 @@
-// components/ExperienceCard.jsx
 import React from 'react';
 
 const ExperienceCard = ({ experience, index }) => {
