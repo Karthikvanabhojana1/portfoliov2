@@ -25,7 +25,7 @@ const HeroSection = ({ personalInfo, navigateToSection }) => {
         }}>
 
           <img 
-            src="/image/PHOTO-2025-05-09-07-45-10.jpg" // Place your image in public/images/
+            src="/PHOTO-2025-05-09-07-45-10.jpg" // Place your image in public/images/
             alt={`${personalInfo.name} - Profile Picture`}
             style={{
               width: '180px',
