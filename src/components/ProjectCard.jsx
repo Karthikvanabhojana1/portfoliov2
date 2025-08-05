@@ -223,7 +223,7 @@ const ProjectLinks = ({ github, website }) => {
   return (
     <div style={{ display: 'flex', gap: '1.5rem', marginTop: '2rem' }}>
       {/* Live Demo Link */}
-      <a 
+      {/* <a 
         href={website} 
         target="_blank" 
         rel="noopener noreferrer" 
@@ -235,7 +235,7 @@ const ProjectLinks = ({ github, website }) => {
         }}
       >
         <i className="fas fa-external-link-alt"></i> Live Demo
-      </a>
+      </a> */}
       
       {/* Source Code Link */}
       <a 

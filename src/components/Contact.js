@@ -11,7 +11,6 @@ const ContactSection = () => {
   const [submitStatus, setSubmitStatus] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -26,7 +25,7 @@ const ContactSection = () => {
   };
 
   return (
-    <section id="contact" className="py-32 px-4 max-w-6xl mx-auto text-white">
+    <section id="contact-legacy" className="py-32 px-4 max-w-6xl mx-auto text-white">
       <h2 className="text-4xl font-bold text-center mb-6 bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">
         Get In Touch - Let's Build Something Amazing
       </h2>

@@ -1,4 +1,3 @@
-// components/ContactMethods.jsx
 import React from 'react';
 
 const ContactMethods = ({ personalInfo }) => {
@@ -35,6 +34,15 @@ const ContactMethods = ({ personalInfo }) => {
       value: 'Source Code Portfolio',
       color: '#f59e0b',
       colorRgb: '245, 158, 11',
+      external: true
+    },
+    {
+      href: personalInfo.calendly,
+      icon: 'fas fa-calendar-alt',
+      label: 'Schedule Meeting',
+      value: 'Book via Calendly',
+      color: '#2563eb',
+      colorRgb: '37, 99, 235',
       external: true
     }
   ];

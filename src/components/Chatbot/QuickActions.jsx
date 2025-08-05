@@ -19,8 +19,8 @@ const QuickActions = ({ setQuickMessage, navigateToSection, isLoading }) => {
     },
     { 
       label: 'Contact', 
-      prompt: 'contact',
-      action: 'navigate'
+      prompt: 'How can I contact Karthik?',
+      action: 'message'
     }
   ];
 

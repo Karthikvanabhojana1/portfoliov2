@@ -18,7 +18,7 @@ const ContactSection = ({ personalInfo }) => {
   ];
 
   return (
-    <section id="contact" className="reveal" style={{ 
+    <section id="contact-legacy" className="reveal" style={{ 
       padding: '8rem 2rem',
       maxWidth: '1200px', 
       margin: '0 auto',
@@ -62,7 +62,7 @@ const ContactSection = ({ personalInfo }) => {
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent'
           }}>
-            📧 Send Me a Message
+            Send Me a Message
           </h3>
           <p style={{
             color: 'rgba(203, 213, 225, 0.9)',

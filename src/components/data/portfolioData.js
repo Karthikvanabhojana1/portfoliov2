@@ -8,8 +8,7 @@ export const personalInfo = {
     website: "https://karthikvanabhojana.com",
     github: "https://github.com/Karthikvanabhojana1",
     linkedin: "https://linkedin.com/in/karthik-vanabhojana",
-    summary: "Software Developer with 3+ years of experience building scalable backend systems using Java, Spring Boot, and MySQL in Agile environments. Proven expertise in microservices architecture, cloud-native services, and enterprise-grade applications. Currently pursuing MS in Information Systems at Northeastern University."
-  };
+    summary: "Software Developer with 3+ years of experience building scalable backend systems using Java, Spring Boot, and MySQL in Agile environments. Skilled in microservices architecture, cloud-native services, and DevOps tooling (Docker, Kubernetes, Terraform). Proficient in Python, JavaScript, and modern frontend frameworks. Currently pursuing MS in Information Systems at Northeastern University."  };
   
   export const projects = [
     {
@@ -19,7 +18,7 @@ export const personalInfo = {
       tags: ['Node.js', 'Socket.IO', 'SQLite'],
       category: 'Full-Stack',
       impact: '1000+ users',
-      github: 'https://github.com/Karthikvanabhojana1/securechat'
+      github: 'https://github.com/Karthikvanabhojana1/messagingapp.git'
     },
     {
       id: 2,
@@ -28,7 +27,7 @@ export const personalInfo = {
       tags: ['Python', 'FastAPI', 'React'],
       category: 'AI/ML',
       impact: 'Production AI system',
-      github: 'https://github.com/Karthikvanabhojana1/soros-chatbot'
+      github: 'https://github.com/Karthikvanabhojana1/stockpredictionmodel.git'
     },
     {
       id: 3,
@@ -37,7 +36,7 @@ export const personalInfo = {
       tags: ['Spring Boot', 'MySQL', 'JWT'],
       category: 'Backend',
       impact: 'Enterprise-grade API',
-      github: 'https://github.com/Karthikvanabhojana1/blog-api'
+      github: 'https://github.com/Karthikvanabhojana1/blog-application.git'
     },
     {
       id: 4,
@@ -46,7 +45,7 @@ export const personalInfo = {
       tags: ['React', 'Node.js', 'Redis'],
       category: 'Full-Stack',
       impact: '99.9% uptime',
-      github: 'https://github.com/Karthikvanabhojana1/weather-app'
+      github: 'https://github.com/Karthikvanabhojana1/weatherapp.git'
     },
     {
       id: 5,
@@ -55,7 +54,7 @@ export const personalInfo = {
       tags: ['React', 'Material-UI', 'Chart.js'],
       category: 'Frontend',
       impact: 'Data visualization platform',
-      github: 'https://github.com/Karthikvanabhojana1/dashboard'
+      github: 'https://github.com/Karthikvanabhojana1/dashboard.git'
     },
     {
       id: 6,
@@ -64,7 +63,7 @@ export const personalInfo = {
       tags: ['React', 'OpenAI API', 'Tailwind'],
       category: 'AI/ML',
       impact: 'AI integration showcase',
-      github: 'https://github.com/Karthikvanabhojana1/chatgpt-wrapper'
+      github: 'https://github.com/Karthikvanabhojana1/chatbot.git'
     },
     {
       id: 7,
@@ -73,7 +72,7 @@ export const personalInfo = {
       tags: ['GCP', 'Terraform', 'Cloud Functions'],
       category: 'DevOps',
       impact: '30% faster deployments',
-      github: 'https://github.com/Karthikvanabhojana1/cloud-infrastructure'
+      github: 'https://github.com/Karthik-vanabhojana/webapp.git'
     },
     {
       id: 8,
@@ -82,7 +81,7 @@ export const personalInfo = {
       tags: ['Spring Boot', 'PostgreSQL', 'Microservices'],
       category: 'Backend',
       impact: 'Scalable banking platform',
-      github: 'https://github.com/Karthikvanabhojana1/banking-system'
+      github: 'https://github.com/Karthikvanabhojana1/bankingapplication.git'
     }
   ];
   

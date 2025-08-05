@@ -12,12 +12,16 @@ const FooterSection = ({ personalInfo }) => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer style={{
-      background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)',
-      borderTop: '2px solid rgba(99, 102, 241, 0.2)',
-      padding: '4rem 2rem 2rem',
-      marginTop: '4rem'
-    }}>
+    <footer
+      id="footer"
+      className="reveal"
+      style={{
+        background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)',
+        borderTop: '2px solid rgba(99, 102, 241, 0.2)',
+        padding: '4rem 2rem 2rem',
+        marginTop: '4rem'
+      }}
+    >
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         
         {/* Main Footer Content */}

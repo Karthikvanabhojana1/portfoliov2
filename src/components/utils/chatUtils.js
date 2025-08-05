@@ -230,11 +230,13 @@ Recent achievements include ${experiences[0].metrics.improvement} boost in relea
 const getContactResponse = () => {
   return `Ready to hire Karthik for your next software development project? Here's how to connect:
 
-**Email:** ${personalInfo.email}
-**Phone:** ${personalInfo.phone}
-**Portfolio:** ${personalInfo.website}
-**GitHub:** ${personalInfo.github}
-**LinkedIn:** ${personalInfo.linkedin}
+Email: ${personalInfo.email}
+Phone: ${personalInfo.phone}
+Portfolio:${personalInfo.website}
+GitHub: ${personalInfo.github}
+LinkedIn: ${personalInfo.linkedin}
+// Resume: ${personalInfo.calendly ? `Resume: [Karthik Vanabhojana Resume](${personalInfo.resume})` : ''}
+// Schedule: ${personalInfo.calendly ? `Meeting: [Schedule a meeting with Karthik Vanabhojana](${personalInfo.calendly})` : ''}
 
 **Currently Seeking:**
 • Full-time software development roles

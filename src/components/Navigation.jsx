@@ -15,7 +15,7 @@ const Navigation = ({
     { key: 'experience', label: 'Experience' },
     { key: 'tech', label: 'Tech Stack' },
     { key: 'projects', label: 'Projects' },
-    { key: 'contact', label: 'Contact' }
+    { key: 'footer', label: 'Contact' }
   ];
 
   const handleNavClick = (section) => {

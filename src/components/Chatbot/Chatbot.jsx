@@ -20,6 +20,12 @@ const Chatbot = ({
   const chatMessagesRef = useRef(null);
   const [chatInput, setChatInput] = useState('');
 
+  const formatMessage = (text) => {
+    if (!text) return '';
+    return text.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
+      '<a href="$2" target="_blank" rel="noopener noreferrer" style="color:#93c5fd;text-decoration:underline;">$1</a>');
+  };
+
   useEffect(() => {
     if (chatMessagesRef.current) {
       chatMessagesRef.current.scrollTop = chatMessagesRef.current.scrollHeight;
@@ -179,9 +185,10 @@ const Chatbot = ({
                   overflowWrap: 'break-word'
                 }}
               >
-                <div style={{ whiteSpace: 'pre-line' }}>
-                  {message.text}
-                </div>
+               <div
+                  style={{ whiteSpace: 'pre-line' }}
+                  dangerouslySetInnerHTML={{ __html: formatMessage(message.text) }}
+                />
                 <div style={{ 
                   fontSize: '0.75rem',
                   opacity: 0.7, 
@@ -295,24 +302,19 @@ const Chatbot = ({
               marginTop: '1rem',
               justifyContent: 'center'
             }}>
-              {['Projects', 'Experience', 'Skills'].map(action => (
+              {['Projects', 'Experience', 'Skills', 'Contact'].map(action => (
                 <button
                   key={action}
-                  onClick={() => {
-                    if (action === 'Contact') {
-                      setChatbotOpen(false);
-                      if (navigateToSection) {
-                        navigateToSection('contact');
-                      }
-                    } else {
+                  onClick={() => { 
                       const prompts = {
                         'Projects': `Tell me about Karthik's software projects in detail`,
                         'Experience': 'What is Karthik\'s professional experience and achievements?',
-                        'Skills': 'What are Karthik\'s technical skills and expertise levels?'
+                        'Skills': 'What are Karthik\'s technical skills and expertise levels?',
+                        'Contact': `How can I contact Karthik?`
                       };
                       sendMessage(prompts[action]);
                     }
-                  }}
+                  }
                   disabled={isLoading}
                   style={{
                     padding: '0.5rem 1rem',

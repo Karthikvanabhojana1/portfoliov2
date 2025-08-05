@@ -1,10 +1,9 @@
 const HeroSection = ({ personalInfo, navigateToSection }) => {
   const downloadResume = () => {
     const link = document.createElement('a');
-    link.href = 'https://drive.google.com/drive/folders/17dn1Fy8qNmHk2Nup-9j9ZBqyel_FI9gS?usp=sharing';  // Place PDF in public/resume/
+    link.href = 'https://drive.google.com/drive/folders/17dn1Fy8qNmHk2Nup-9j9ZBqyel_FI9gS?usp=sharing';
     link.download = 'Karthik_Vanabhojana_Resume.pdf';
     link.click();
-
   };
 
   return (
@@ -18,6 +17,37 @@ const HeroSection = ({ personalInfo, navigateToSection }) => {
       overflow: 'hidden'
     }}>
       <div style={{ zIndex: 2, animation: 'fadeInUp 1s ease-out', maxWidth: '1200px', padding: '0 2rem' }}>
+        
+        {/* PROFILE PICTURE */}
+        <div style={{
+          marginBottom: '0rem',
+          animation: 'fadeInUp 1s ease-out 0.2s both'
+        }}>
+
+          <img 
+            src="/image/PHOTO-2025-05-09-07-45-10.jpg" // Place your image in public/images/
+            alt={`${personalInfo.name} - Profile Picture`}
+            style={{
+              width: '180px',
+              height: '180px',
+              borderRadius: '50%',
+              objectFit: 'cover',
+              border: '4px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3)',
+              transition: 'all 0.3s ease',
+              cursor: 'pointer'
+            }}
+            onMouseOver={(e) => {
+              e.target.style.transform = 'scale(1.05)';
+              e.target.style.boxShadow = '0 25px 50px rgba(0, 0, 0, 0.4)';
+            }}
+            onMouseOut={(e) => {
+              e.target.style.transform = 'scale(1)';
+              e.target.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.3)';
+            }}
+          />
+        </div>
+
         <h1>{personalInfo.name}</h1>
         <p className="subtitle">{personalInfo.title}</p>
         <div style={{ 
@@ -42,7 +72,6 @@ const HeroSection = ({ personalInfo, navigateToSection }) => {
             <span>Explore Projects</span>
           </button>
           
-          {/* RESUME DOWNLOAD BUTTON */}
           <button onClick={downloadResume} className="btn btn-accent" style={{
             background: 'linear-gradient(135deg, #f59e0b, #d97706)',
             color: 'white',
@@ -62,7 +91,7 @@ const HeroSection = ({ personalInfo, navigateToSection }) => {
             <span>Download Resume</span>
           </button>
           
-          <button onClick={() => navigateToSection('contact')} className="btn btn-secondary">
+          <button onClick={() => navigateToSection('contact-legacy')} className="btn btn-secondary">
             <span>Get In Touch</span>
           </button>
         </div>
